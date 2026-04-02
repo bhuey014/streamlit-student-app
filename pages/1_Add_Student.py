@@ -12,12 +12,10 @@ with st.form("add_student_form"):
     name = st.text_input("Student Name")
     email = st.text_input("Student Email")
     submitted = st.form_submit_button("Add Student")
-
-        if submitted:
+    if submitted:
         import re
         email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         is_valid_email = re.match(email_pattern, email)
-
         if not name or not email:
             st.warning("Please fill in both fields.")
         elif not is_valid_email:
@@ -39,6 +37,14 @@ with st.form("add_student_form"):
             except Exception as e:
                 st.error(f"Error: {e}")
 
+st.subheader("📋 Current Students")
+try:
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, name, email FROM students10;")
+    students = cur.fetchall()
+    cur.close()
+    conn.close()
     if students:
         st.table([{"ID": s[0], "Name": s[1], "Email": s[2]} for s in students])
     else:
