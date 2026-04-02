@@ -38,3 +38,10 @@ with st.form("add_student_form"):
                 st.error("⚠️ A student with that email already exists.")
             except Exception as e:
                 st.error(f"Error: {e}")
+
+    if students:
+        st.table([{"ID": s[0], "Name": s[1], "Email": s[2]} for s in students])
+    else:
+        st.info("No students yet.")
+except Exception as e:
+    st.error(f"Error: {e}")
